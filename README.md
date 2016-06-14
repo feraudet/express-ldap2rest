@@ -58,7 +58,7 @@ It will return a token
 - Combine scope, filter and attributes: `curl http://localhost:3000/v1/dc=exemple,dc=com/sub/cn,mail/(|(cn=jo*)(cn=ba*))`
 
 ### Add a new entry
-
+- Url: /v1
 - Method: PUT
 - data:
 ```
@@ -74,3 +74,76 @@ It will return a token
 }
 ```
 
+### Delete entry
+- Url: /v1/dn_to_delete[?auth=<token>]
+- Method: DELETE
+
+### Add attribute
+- Url: /v1/dn_to_modify[?auth=<token>]
+- Method: PUT
+```
+{
+  "command": "modify",
+  "actions": {
+    "add": {
+      "description": "My description"
+    }
+  }
+}
+```
+
+### Add non-uniq attribute
+- Url: /v1/dn_to_modify[?auth=<token>]
+- Method: PUT
+```
+{
+  "command": "modify",
+  "actions": {
+    "add": {
+      "description": ["My first description", "My second description"]
+    }
+  }
+}
+```
+
+### Replace attribute
+- Url: /v1/dn_to_modify[?auth=<token>]
+- Method: PUT
+```
+{
+  "command": "modify",
+  "actions": {
+    "replace": {
+      "description": "My description"
+    }
+  }
+}
+```
+
+### Replace non-uniq attribute
+- Url: /v1/dn_to_modify[?auth=<token>]
+- Method: PUT
+```
+{
+  "command": "modify",
+  "actions": {
+    "replace": {
+      "description": ["My first description", "My second description"]
+    }
+  }
+}
+```
+
+### Delete attribute
+- Url: /v1/dn_to_modify[?auth=<token>]
+- Method: PUT
+```
+{
+  "command": "modify",
+  "actions": {
+    "delete": {
+      "description": "My description"
+    }
+  }
+}
+```
