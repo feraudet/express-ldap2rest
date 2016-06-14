@@ -1,0 +1,33 @@
+{
+  "name": "express-ldap2rest",
+  "version": "1.0.0",
+  "description": "LDAP to RESP middleware for expressjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feraudet/express-ldap2rest.git"
+  },
+  "keywords": [
+    "ldap",
+    "rest",
+    "node",
+    "javascript",
+    "api",
+    "express",
+    "expressjs"
+  ],
+  "author": "Cyril Feraudet <cyril@feraudet.com> (https://github.com/feraudet)",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/feraudet/express-ldap2rest/issues"
+  },
+  "homepage": "https://github.com/feraudet/express-ldap2rest#readme",
+  "dependencies": {
+    "crypto": "0.0.3",
+    "ldapjs": "^1.0.0",
+    "synchronize": "^0.9.15"
+  }
+}
