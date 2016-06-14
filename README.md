@@ -21,12 +21,10 @@ var express = require('express'),
 	cookieParser = require('cookie-parser')
 ;
 
-middleware.passphrase = 'ReallyStrongToo';
+middleware.passphrase = 'StrongPassword';
 middleware.config = {
   url: 'ldaps://ldap.exemple.com/',
-  binddn: 'cn=admin,dc=exemple,dc=com',
-  credentials: 'VeryStrongOne',
-	options: { rejectUnauthorized: false }
+  options: { rejectUnauthorized: false }
 };
 middleware.tokenTimeout = 3600;
 
