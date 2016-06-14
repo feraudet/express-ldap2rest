@@ -11,7 +11,7 @@ LDAP to RESP middleware for expressjs based on ldapjs
 - Attribut adding, replacement and deleting
 
 ## How to use
-- `npm install express-ldap2rest`
+- `npm install express-ldap2rest express body-parser cookie-parser`
 - Create a `server.js` file like :
 ```
 var express = require('express'),
