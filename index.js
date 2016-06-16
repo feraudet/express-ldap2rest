@@ -190,13 +190,13 @@ function get(client, req, res, next) {
             entries.push(entry.object);
           });
           lres.on('error', function(err) {
-            res.status(500).json({err: err});
+            res.status(400).json({err: err});
           });
           lres.on('end', function(result) {
             if(result.status == 0) {
               res.json(entries);
             } else {
-              res.status(500).json({err: result});
+              res.status(400).json({err: result});
             }
           });
         }
