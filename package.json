@@ -1,6 +1,6 @@
 {
   "name": "express-ldap2rest",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "LDAP to RESP middleware for expressjs",
   "main": "index.js",
   "scripts": {
