@@ -31,12 +31,10 @@ var ldap_middleware = {
 
 function auth(req, res, next, func) {
   var client = connect();
-  if((req.cookies != undefined && req.cookies.auth != undefined) || req.query.auth != undefined) {
+  if(req.query.auth != undefined) {
     if (req.query.auth != undefined) {
       var auth = JSON.parse(decrypt(req.query.auth));
-    } else if (req.cookies != undefined && req.cookies.auth != undefined) {
-      var auth = JSON.parse(decrypt(req.cookies.auth));
-    }
+    } 
     if (auth.expireTime < parseInt(new Date().getTime()/1000)) {
       res.status(401).json({err: "Auth datas expired"});
     } else if (auth.dn != undefined && auth.credential != undefined) {
@@ -232,7 +230,6 @@ function post(req, res, next) {
       credential: req.body.credential
     };
     var datas = encrypt(JSON.stringify(auth));
-    res.cookie('auth', datas);
     res.send(datas);
   } else {
     next();
