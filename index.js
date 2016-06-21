@@ -88,9 +88,15 @@ function put(client, req, res, next) {
             case 'replace':
             case 'delete':
               for (var attribut in req.body.actions[action]) {
-                console.log(action, attribut);
                 var datas = {};
-                datas[attribut] = req.body.actions[action][attribut];
+                switch (attribut) {
+                  case 'jpegPhoto':
+                    datas[attribut] = new Buffer(req.body.actions[action][attribut], 'base64');
+                  break;
+                  default:
+                    datas[attribut] = req.body.actions[action][attribut];
+                  break;
+                }
                 var change = new ldap.Change({
                   operation: action,
                   modification: datas
