@@ -187,7 +187,11 @@ function get(client, req, res, next) {
       client.search(dn, opts, function (err, lres) {
         if (!err) {
           lres.on('searchEntry', function(entry) {
-            entries.push(entry.object);
+            var obj = entry.object;
+            var raw = entry.raw;
+            var jpegPhoto = raw.jpegPhoto;
+            if (jpegPhoto) obj.jpegPhoto = jpegPhoto.toString('base64');
+            entries.push(obj);
           });
           lres.on('error', function(err) {
             res.status(400).json({err: err});
