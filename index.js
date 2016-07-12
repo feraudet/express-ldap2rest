@@ -58,6 +58,7 @@ function del(client, req, res, next) {
   var apiversion = parts.shift();
   var dn = parts.shift();
   client.del(dn, function(err) {
+    client.unbind(function(){});
     if (err) {
       res.status(400).json({err: err});
     } else {
@@ -87,37 +88,36 @@ function put(client, req, res, next) {
             case 'add':
             case 'replace':
             case 'delete':
-              for (var attribut in req.body.actions[action]) {
-                var datas = {};
-                switch (attribut) {
-                  case 'jpegPhoto':
-                    datas[attribut] = new Buffer(req.body.actions[action][attribut], 'base64');
-                  break;
-                  default:
-                    datas[attribut] = req.body.actions[action][attribut];
-                  break;
-                }
-                var change = new ldap.Change({
-                  operation: action,
-                  modification: datas
-                });
-                try {
-                  sync.await(client.modify(dn, change, sync.defer()));
-                } catch (e) {
-                  if (!res._headerSent) {
-                    res.status(400).json({err: e.toString()});
+              var datas = req.body.actions[action];
+              if (req.body.actions[action]['jpegPhoto'] != undefined) {
+                  datas['jpegPhoto'] = new Buffer(req.body.actions[action]['jpegPhoto'], 'base64');
+              }
+              var change = new ldap.Change({
+                operation: action,
+                modification: datas
+              });
+              try {
+                client.modify(dn, change, function(err) {
+                  if (err) {
+                    res.status(400).json({err: err});
+                    client.unbind(function(){});
+                    return;
+                  } else if (!res._headerSent) {
+                    res.status(200).json({msg: "ok"});
                   }
-                }
+                });
+              } catch (e) {
+                res.status(400).json({err: e.toString()});
+                client.unbind(function(){});
+                return;
               }
             break;
             default:
               res.status(400).json({err: "Unknown action " + action});
+              client.unbind(function(){});
               return;
             break;
           }
-        }
-        if (!res._headerSent) {
-          res.status(200).json({msg: "ok"});
         }
       });
     break;
@@ -128,6 +128,7 @@ function put(client, req, res, next) {
       }
       try {
         client.add(dn, req.body.datas, function(err) {
+          client.unbind(function(){});
           if (err) {
             res.status(400).json({err: err});
           } else {
@@ -146,6 +147,7 @@ function put(client, req, res, next) {
       }
       try {
         client.modifyDN(dn, req.body.newdn, function(err) {
+          client.unbind(function(){});
           if (err) {
             res.status(400).json({err: err});
           } else {
@@ -201,6 +203,7 @@ function get(client, req, res, next) {
             res.status(400).json({err: err});
           });
           lres.on('end', function(result) {
+            client.unbind(function(){});
             if(result.status == 0) {
               res.json(entries);
             } else {
@@ -210,10 +213,12 @@ function get(client, req, res, next) {
         }
       });
     } catch (e) {
+      client.unbind(function(){});
       res.status(400).json({err: e.toString()});
       return;
     }
   } catch (e) {
+    client.unbind(function(){});
     res.status(400).json({err: e.toString()});
     return;
   }
